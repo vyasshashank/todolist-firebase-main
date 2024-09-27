@@ -155,37 +155,38 @@ const TodoList = () => {
 
   return (
     <div
-      className="min-h-screen bg-gradient-conic from-gray-900 via-purple-900 to-black flex flex-col items-center justify-center p-6"
-      onDragOver={handleDragOver}
-    >
-      <div className="max-w-4xl w-full bg-red-200 shadow-lg rounded-lg p-8 flex flex-col justify-between">
+  className="min-h-screen bg-gradient-to-r from-gray-800 to-gray-600 flex flex-col items-center justify-center p-6"
+  onDragOver={handleDragOver}
+>
+
+      <div className="max-w-4xl w-full bg-gray-800 shadow-lg rounded-lg p-8 flex flex-col justify-between">
         <div>
-        <h2 className="text-3xl font-bold text-gray-900 text-center mb-6">
-  To-Do App
-</h2>
-
-
+          <h2 className="text-3xl font-bold text-white text-center mb-6">
+            To-Do App
+          </h2>
+  
           <div className="mb-4 flex justify-between">
             <input
               type="text"
               value={newListName}
               onChange={(e) => setNewListName(e.target.value)}
-              className="flex-1 p-2 border rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="flex-1 p-2 border rounded-md text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               placeholder="Create new To-Do List"
             />
             <button
-              onClick={addTodoList}
-              className="ml-4 bg-indigo-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-indigo-600 transition"
-            >
-              Add List
-            </button>
-          </div>
+  onClick={addTodoList}
+  className="ml-4 bg-gray-700 text-white px-4 py-2 rounded-md shadow-md hover:bg-gray-600 transition"
+>
+  Add List
+</button>
 
+          </div>
+  
           <div className="grid lg:grid-cols-2 gap-6">
             {todoLists.map((list) => (
-              <div key={list.id} className="p-6 bg-red-300 rounded-lg shadow-md">
-                <h3 className="text-xl font-bold text-indigo-700">{list.name}</h3>
-
+              <div key={list.id} className="p-6 bg-gray-700 rounded-lg shadow-md">
+                <h3 className="text-xl font-bold text-yellow-400">{list.name}</h3>
+  
                 <div className="grid grid-cols-2 gap-2 mb-4">
                   <input
                     type="text"
@@ -193,7 +194,7 @@ const TodoList = () => {
                     onChange={(e) =>
                       handleTaskInputChange(list.id, "title", e.target.value)
                     }
-                    className="p-2 border rounded-md"
+                    className="p-2 border rounded-md text-black"
                     placeholder="Task Title"
                   />
                   <input
@@ -206,7 +207,7 @@ const TodoList = () => {
                         e.target.value
                       )
                     }
-                    className="p-2 border rounded-md"
+                    className="p-2 border rounded-md text-black"
                     placeholder="Task Description"
                   />
                 </div>
@@ -217,37 +218,40 @@ const TodoList = () => {
                     onChange={(e) =>
                       handleTaskInputChange(list.id, "dueDate", e.target.value)
                     }
-                    className="p-2 border rounded-md"
+                    className="p-2 border rounded-md text-black"
+
                   />
                   <select
                     value={taskInputs[list.id]?.priority || "low"}
                     onChange={(e) =>
                       handleTaskInputChange(list.id, "priority", e.target.value)
                     }
-                    className="p-2 border rounded-md"
+                    className="p-2 border rounded-md text-black"
                   >
                     <option value="low">Low</option>
                     <option value="medium">Medium</option>
                     <option value="high">High</option>
                   </select>
                 </div>
-
+  
                 <button
-                  onClick={() => addTask(list.id)}
-                  className="bg-indigo-500 text-white px-4 py-2 rounded-md shadow-md"
-                >
-                  Add Task
-                </button>
+  onClick={() => addTask(list.id)}
+  className="bg-gray-800 text-white px-4 py-2 rounded-md shadow-md hover:bg-gray-700 transition"
+>
+  Add Task
+</button>
 
+
+  
                 {["low", "medium", "high"].map((priority) => (
                   <div
                     key={priority}
                     className={`p-4 rounded-lg shadow-md mt-4 ${
                       priority === "high"
-                        ? "bg-red-500"
+                        ? "bg-red-600"
                         : priority === "medium"
-                        ? "bg-yellow-500"
-                        : "bg-green-500"
+                        ? "bg-yellow-600"
+                        : "bg-green-600"
                     }`}
                     onDrop={() => handleDrop(list.id, priority)}
                     onDragOver={handleDragOver}
@@ -260,13 +264,13 @@ const TodoList = () => {
                       .map((task) => (
                         <div
                           key={task.id}
-                          className="bg-white p-3 mt-2 rounded-lg shadow-md flex justify-between items-center"
+                          className="bg-gray-800 p-3 mt-2 rounded-lg shadow-md flex justify-between items-center"
                           draggable
                           onDragStart={() => handleDragStart(task, list.id)}
                         >
                           <div>
-                            <h5 className="font-bold text-black">{task.title}</h5>
-                            <p className="text-sm text-gray-600">
+                            <h5 className="font-bold text-gray-200">{task.title}</h5>
+                            <p className="text-sm text-gray-400">
                               {task.description}
                             </p>
                           </div>
@@ -279,7 +283,7 @@ const TodoList = () => {
             ))}
           </div>
         </div>
-
+  
         <div className="flex justify-center mt-8">
           <button
             onClick={handleLogout}
@@ -292,6 +296,5 @@ const TodoList = () => {
       </div>
     </div>
   );
-};
-
+}
 export default TodoList;
