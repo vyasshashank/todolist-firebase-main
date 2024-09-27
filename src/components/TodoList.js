@@ -155,132 +155,139 @@ const TodoList = () => {
 
   return (
     <div
-      className="min-h-screen bg-gradient-conic from-gray-900 via-purple-900 to-black flex items-center justify-center p-6"
+      className="min-h-screen bg-gradient-conic from-gray-900 via-purple-900 to-black flex flex-col items-center justify-center p-6"
       onDragOver={handleDragOver}
     >
-      <div className="max-w-4xl w-full bg-red-200 shadow-lg rounded-lg p-8">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-3xl font-bold text-white">To-Do App</h2>
+      <div className="max-w-4xl w-full bg-red-200 shadow-lg rounded-lg p-8 flex flex-col justify-between">
+        <div>
+        <h2 className="text-3xl font-bold text-gray-900 text-center mb-6">
+  To-Do App
+</h2>
+
+
+          <div className="mb-4 flex justify-between">
+            <input
+              type="text"
+              value={newListName}
+              onChange={(e) => setNewListName(e.target.value)}
+              className="flex-1 p-2 border rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              placeholder="Create new To-Do List"
+            />
+            <button
+              onClick={addTodoList}
+              className="ml-4 bg-indigo-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-indigo-600 transition"
+            >
+              Add List
+            </button>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-6">
+            {todoLists.map((list) => (
+              <div key={list.id} className="p-6 bg-red-300 rounded-lg shadow-md">
+                <h3 className="text-xl font-bold text-indigo-700">{list.name}</h3>
+
+                <div className="grid grid-cols-2 gap-2 mb-4">
+                  <input
+                    type="text"
+                    value={taskInputs[list.id]?.title || ""}
+                    onChange={(e) =>
+                      handleTaskInputChange(list.id, "title", e.target.value)
+                    }
+                    className="p-2 border rounded-md"
+                    placeholder="Task Title"
+                  />
+                  <input
+                    type="text"
+                    value={taskInputs[list.id]?.description || ""}
+                    onChange={(e) =>
+                      handleTaskInputChange(
+                        list.id,
+                        "description",
+                        e.target.value
+                      )
+                    }
+                    className="p-2 border rounded-md"
+                    placeholder="Task Description"
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-2 mb-4">
+                  <input
+                    type="date"
+                    value={taskInputs[list.id]?.dueDate || ""}
+                    onChange={(e) =>
+                      handleTaskInputChange(list.id, "dueDate", e.target.value)
+                    }
+                    className="p-2 border rounded-md"
+                  />
+                  <select
+                    value={taskInputs[list.id]?.priority || "low"}
+                    onChange={(e) =>
+                      handleTaskInputChange(list.id, "priority", e.target.value)
+                    }
+                    className="p-2 border rounded-md"
+                  >
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                  </select>
+                </div>
+
+                <button
+                  onClick={() => addTask(list.id)}
+                  className="bg-indigo-500 text-white px-4 py-2 rounded-md shadow-md"
+                >
+                  Add Task
+                </button>
+
+                {["low", "medium", "high"].map((priority) => (
+                  <div
+                    key={priority}
+                    className={`p-4 rounded-lg shadow-md mt-4 ${
+                      priority === "high"
+                        ? "bg-red-500"
+                        : priority === "medium"
+                        ? "bg-yellow-500"
+                        : "bg-green-500"
+                    }`}
+                    onDrop={() => handleDrop(list.id, priority)}
+                    onDragOver={handleDragOver}
+                  >
+                    <h4 className="font-semibold capitalize text-white">
+                      {priority} Priority
+                    </h4>
+                    {list.tasks
+                      .filter((task) => task.priority === priority)
+                      .map((task) => (
+                        <div
+                          key={task.id}
+                          className="bg-white p-3 mt-2 rounded-lg shadow-md flex justify-between items-center"
+                          draggable
+                          onDragStart={() => handleDragStart(task, list.id)}
+                        >
+                          <div>
+                            <h5 className="font-bold text-black">{task.title}</h5>
+                            <p className="text-sm text-gray-600">
+                              {task.description}
+                            </p>
+                          </div>
+                          <p className="text-xs text-gray-500">{task.dueDate}</p>
+                        </div>
+                      ))}
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex justify-center mt-8">
           <button
             onClick={handleLogout}
-            className="bg-red-600 text-white px-4 py-2 rounded-md shadow-md hover:bg-red-700 transition"
+            className="bg-gray-700 text-white px-6 py-2 rounded-md shadow-md hover:bg-gray-600 transition"
+            style={{ alignSelf: "flex-end" }} // Ensure the button is at the bottom
           >
             Logout
           </button>
-        </div>
-
-        <div className="mb-4 flex justify-between">
-          <input
-            type="text"
-            value={newListName}
-            onChange={(e) => setNewListName(e.target.value)}
-            className="flex-1 p-2 border rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            placeholder="Create new To-Do List"
-          />
-          <button
-            onClick={addTodoList}
-            className="ml-4 bg-indigo-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-indigo-600 transition"
-          >
-            Add List
-          </button>
-        </div>
-
-        <div className="grid lg:grid-cols-2 gap-6">
-          {todoLists.map((list) => (
-            <div key={list.id} className="p-6 bg-red-300 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold text-indigo-700">{list.name}</h3>
-
-              <div className="grid grid-cols-2 gap-2 mb-4">
-                <input
-                  type="text"
-                  value={taskInputs[list.id]?.title || ""}
-                  onChange={(e) =>
-                    handleTaskInputChange(list.id, "title", e.target.value)
-                  }
-                  className="p-2 border rounded-md"
-                  placeholder="Task Title"
-                />
-                <input
-                  type="text"
-                  value={taskInputs[list.id]?.description || ""}
-                  onChange={(e) =>
-                    handleTaskInputChange(
-                      list.id,
-                      "description",
-                      e.target.value
-                    )
-                  }
-                  className="p-2 border rounded-md"
-                  placeholder="Task Description"
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-2 mb-4">
-                <input
-                  type="date"
-                  value={taskInputs[list.id]?.dueDate || ""}
-                  onChange={(e) =>
-                    handleTaskInputChange(list.id, "dueDate", e.target.value)
-                  }
-                  className="p-2 border rounded-md"
-                />
-                <select
-                  value={taskInputs[list.id]?.priority || "low"}
-                  onChange={(e) =>
-                    handleTaskInputChange(list.id, "priority", e.target.value)
-                  }
-                  className="p-2 border rounded-md"
-                >
-                  <option value="low">Low</option>
-                  <option value="medium">Medium</option>
-                  <option value="high">High</option>
-                </select>
-              </div>
-
-              <button
-                onClick={() => addTask(list.id)}
-                className="bg-indigo-500 text-white px-4 py-2 rounded-md shadow-md"
-              >
-                Add Task
-              </button>
-
-              {["low", "medium", "high"].map((priority) => (
-                <div
-                  key={priority}
-                  className={`p-4 rounded-lg shadow-md mt-4 ${
-                    priority === "high"
-                      ? "bg-red-500"
-                      : priority === "medium"
-                      ? "bg-yellow-500"
-                      : "bg-green-500"
-                  }`}
-                  onDrop={() => handleDrop(list.id, priority)}
-                  onDragOver={handleDragOver}
-                >
-                  <h4 className="font-semibold capitalize text-white">
-                    {priority} Priority
-                  </h4>
-                  {list.tasks
-                    .filter((task) => task.priority === priority)
-                    .map((task) => (
-                      <div
-                        key={task.id}
-                        className="bg-white p-2 mt-2 rounded-md shadow-md flex justify-between items-center"
-                        draggable
-                        onDragStart={() => handleDragStart(task, list.id)}
-                      >
-                        <div>
-                          <h5 className="font-bold text-black">{task.title}</h5>
-                          <p className="text-sm text-gray-600">
-                            {task.description}
-                          </p>
-                        </div>
-                        <p className="text-xs text-gray-500">{task.dueDate}</p>
-                      </div>
-                    ))}
-                </div>
-              ))}
-            </div>
-          ))}
         </div>
       </div>
     </div>
