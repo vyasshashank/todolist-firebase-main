@@ -119,7 +119,6 @@ const TodoList = () => {
   // Handling drop event to move task between lists or within the same list
   const handleDrop = async (targetListId, priority) => {
     const user = getAuth().currentUser;
-    const { id, listId, ...taskData } = draggedTask;
     if (draggedTask) {
       try {
         if (draggedTask.listId !== targetListId) {
@@ -127,7 +126,7 @@ const TodoList = () => {
           await addDoc(
             collection(db, `users/${user.uid}/todoLists/${targetListId}/tasks`),
             {
-              ...taskData,
+              ...draggedTask,
               priority,
               createdAt: new Date(),
             }
